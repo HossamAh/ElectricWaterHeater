@@ -1,0 +1,79 @@
+/*
+ * outputs.c
+ *
+ *  Created on: Mar 16, 2022
+ *      Author: Hossam
+ */
+#include "outputs.h"
+
+
+void OUTPUTS_init(void)
+{
+	SEVEN_SEG_DIR |= (SEVEN_SEG_DATA_PINS);
+	SEVEN_SEG1_DIR |= (SEVEN_SEG1_DATA_PINS);
+	SET_BIT(SEVEN_SEG_DIR,SEVEN_SEG_ENABLE_PIN);
+	SET_BIT(SEVEN_SEG_DIR,SEVEN_SEG_ENABLE1_PIN);
+
+	SET_BIT(LED_DIR,LED_PIN);
+
+	MOTOR_DIR |= 0x0F;
+}
+
+/*7-segment displaying functions*/
+void SEG_Display_Num(unsigned char temp)
+{
+//	SET_BIT(SEVEN_SEG_PORT,SEVEN_SEG_ENABLE1_PIN);
+	CLEAR_BIT(SEVEN_SEG_PORT,SEVEN_SEG_ENABLE_PIN);
+	SEVEN_SEG_PORT = (SEVEN_SEG_DATA_PINS & (temp/10))|(0xf0 & SEVEN_SEG_PORT);
+//	_delay_us(10);
+
+//	SET_BIT(SEVEN_SEG_PORT,SEVEN_SEG_ENABLE_PIN);
+	CLEAR_BIT(SEVEN_SEG_PORT,SEVEN_SEG_ENABLE1_PIN);
+	SEVEN_SEG1_PORT = (SEVEN_SEG1_DATA_PINS & (temp%10))|(0xf0 & SEVEN_SEG1_PORT);
+//	_delay_us(10);
+
+
+}
+void SEG_OFF(void)
+{
+	SET_BIT(SEVEN_SEG_PORT,SEVEN_SEG_ENABLE_PIN);
+	SET_BIT(SEVEN_SEG_PORT,SEVEN_SEG_ENABLE1_PIN);
+}
+
+/*LED functions*/
+void LED_ON(void)
+{
+	SET_BIT(LED_PORT,LED_PIN);
+}
+void LED_OFF(void)
+{
+	CLEAR_BIT(LED_PORT,LED_PIN);
+}
+
+void LED_Toggle(void)
+{
+	TOGGLE_BIT(LED_PORT,LED_PIN);
+}
+/*MOTORS functions*/
+void Heater_ON(void)
+{
+	SET_BIT(MOTOR_PORT,MOTOR_HEATER_EN_PIN);
+	SET_BIT(MOTOR_PORT,MOTOR_HEATER_IN_PIN);
+}
+void Heater_OFF(void)
+{
+	CLEAR_BIT(MOTOR_PORT,MOTOR_HEATER_EN_PIN);
+	CLEAR_BIT(MOTOR_PORT,MOTOR_HEATER_IN_PIN);
+}
+
+void Cooling_ON(void)
+{
+	SET_BIT(MOTOR_PORT,MOTOR_Cooling_EN_PIN);
+	SET_BIT(MOTOR_PORT,MOTOR_Cooling_IN_PIN);
+}
+void Cooling_OFF(void)
+{
+	CLEAR_BIT(MOTOR_PORT,MOTOR_Cooling_EN_PIN);
+	CLEAR_BIT(MOTOR_PORT,MOTOR_Cooling_IN_PIN);
+}
+
